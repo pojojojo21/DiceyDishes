@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Side Salad
   instant: 
   effect: Move another Recipe up 1 track on your Menu.
-  artwork: {fileID: 0}
-  coins: 10
+  ability: 
+  basePrice: 10
+  totalValue: 10
   tier: 1
   type: 01000000
   cost: 06000000090000000a000000
+  made: 0

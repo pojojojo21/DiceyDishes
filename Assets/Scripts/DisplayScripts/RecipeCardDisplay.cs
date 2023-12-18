@@ -80,7 +80,7 @@ public class RecipeCardDisplay : MonoBehaviour
     void displaySet()
     {
         cardNameText.text = recipeCard.name;
-        priceText.text = recipeCard.coins.ToString();
+        priceText.text = recipeCard.basePrice.ToString();
 
         switch (recipeCard.tier)
         {

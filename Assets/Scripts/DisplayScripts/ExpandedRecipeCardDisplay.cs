@@ -22,8 +22,8 @@ public class ExpandedRecipeCardDisplay : MonoBehaviour
     void Start()
     {
         cardNameText.text = recipeCard.name;
-        priceText.text = recipeCard.coins.ToString();
-        descriptionText.text = recipeCard.effect.ToString() + recipeCard.instant.ToString();
+        priceText.text = recipeCard.basePrice.ToString();
+        SetDescriptionText();
 
         switch (recipeCard.tier)
         {
@@ -75,5 +75,28 @@ public class ExpandedRecipeCardDisplay : MonoBehaviour
             diceText.text = newText;
         }
 
+    }
+
+    void SetDescriptionText()
+    {
+        descriptionText.text = "";
+
+        // set instant
+        if (recipeCard.instant.Length > 0)
+        {
+            descriptionText.text += "Instant: " + recipeCard.instant.ToString() + "\n";
+        }
+
+        // set effect
+        if (recipeCard.effect.Length > 0)
+        {
+            descriptionText.text += "Effect: " + recipeCard.effect.ToString() + "\n";
+        }
+
+        // set ability
+        if (recipeCard.ability.Length > 0)
+        {
+            descriptionText.text += recipeCard.instant.ToString() + "\n";
+        }
     }
 }

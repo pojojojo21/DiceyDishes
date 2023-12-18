@@ -214,8 +214,6 @@ public class GameManagerScript : MonoBehaviour
             players[i].playerDieCount = player.playerDieCount;
             players[i].SetDiceFromPlayer(player);
         }
-        Debug.Log("Reset Dice");
-
     }
 
     void FlipEventCard()
@@ -228,75 +226,19 @@ public class GameManagerScript : MonoBehaviour
         Debug.Log("Flip Critic Card");
     }
 
-    public void BuyDicePhase()
-    {
-        Debug.Log("Commence Buy Dice Phase");
-
-        // Check all players done buying dice and making recipes
-        Invoke("CheckAllPlayersDoneMake", 3);
-    }
-
-    void CheckAllPlayersDoneMake()
-    {
-        // Check if all players are Done
-        Debug.Log("Check all players Done");
-
-        Debug.Log("When all players are done Return");
-
-        // Call Start Resolve Recipes Phase
-        Invoke("ResolveRecipesPhase", 3);
-    }
-
-    void ResolveRecipesPhase()
-    {
-        // Start Resolve Recipes Phase 3
-        currentPhase++;
-
-        // Resolve recipe Effects
-
-        // Call Collect coins earned
-        Invoke("CoinCollect", 3);
-
-    }
-
-    void CoinCollect()
-    {
-        // Start Coin collection phase 4
-        currentPhase++;
-
-        // Move recipe cards to their new track
-
-        // If a player has earned a star, give them a star
-    }
-
-    void BuyRecipes()
-    {
-        // Start Buy recipes phase 5
-        currentPhase++;
-
-        // Check all players done buying recipes
-        Invoke("CheckAllPlayersDoneBuy", 3);
-    }
-
-    void CheckAllPlayersDoneBuy()
-    {
-        // Check if all players are Done
-        Debug.Log("Check all players Done");
-
-        Debug.Log("When all players are done Return");
-
-        // round end 
-        round++;
-
-        //  Refill Shop
-        Invoke("FillShop", 3);
-    }
-
     void drawRecipeCard()
     {
         int i = Random.Range(0, recipeDeck.Count);
         RecipeCard r = recipeDeck[i];
         recipeDeck.Remove(r);
         shop.Add(r);
+    }
+
+    public RecipeCard BuyFromDeck()
+    {
+        int i = Random.Range(0, recipeDeck.Count);
+        RecipeCard r = recipeDeck[i];
+        recipeDeck.Remove(r);
+        return r;
     }
 }

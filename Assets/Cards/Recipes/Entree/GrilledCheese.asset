@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Grilled Cheese
   instant: 
-  effect: This Recipe is always in your middle track.
-  artwork: {fileID: 0}
-  coins: 12
+  effect: 
+  ability: This Recipe is always in your middle track.
+  basePrice: 12
+  totalValue: 12
   tier: 1
   type: 00000000
   cost: 0100000003000000
+  made: 0

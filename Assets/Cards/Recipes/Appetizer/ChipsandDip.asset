@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: If this is the first recipe you make this round, you may change the result
     of one of your remaining dice to a result of you choosing.
   effect: 
-  artwork: {fileID: 0}
-  coins: 4
+  ability: 
+  basePrice: 4
+  totalValue: 4
   tier: 2
   type: 02000000
   cost: 0600000007000000
+  made: 0

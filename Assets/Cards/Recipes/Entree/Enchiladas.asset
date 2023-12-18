@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Enchiladas
   instant: 
   effect: 
-  artwork: {fileID: 0}
-  coins: 20
+  ability: 
+  basePrice: 20
+  totalValue: 20
   tier: 2
   type: 00000000
   cost: 06000000060000000700000007000000
+  made: 0

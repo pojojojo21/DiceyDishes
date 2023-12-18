@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Orange Chicken
   instant: 
   effect: Look at the top card of the critic deck, and then put it back.
-  artwork: {fileID: 0}
-  coins: 30
+  ability: 
+  basePrice: 30
+  totalValue: 30
   tier: 2
   type: 00000000
   cost: 06000000090000000a0000000b0000000c000000
+  made: 0

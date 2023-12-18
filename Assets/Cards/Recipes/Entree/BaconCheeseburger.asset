@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Bacon Cheeseburger
   instant: 
-  effect: This card's value is increased to 20 coins when it is in your middle track.
-  artwork: {fileID: 0}
-  coins: 16
+  effect: 
+  ability: This card's value is increased to 20 coins when it is in your middle track.
+  basePrice: 16
+  totalValue: 16
   tier: 2
   type: 00000000
   cost: 03000000040000000e0000000e000000
+  made: 0

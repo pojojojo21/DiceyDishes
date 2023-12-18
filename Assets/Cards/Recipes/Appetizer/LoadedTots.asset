@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Loaded Tots
   instant: If this is the first recipe you make this round, gain 6 coins.
   effect: 
-  artwork: {fileID: 0}
-  coins: 6
+  ability: 
+  basePrice: 6
+  totalValue: 6
   tier: 2
   type: 02000000
   cost: 050000000e000000
+  made: 0

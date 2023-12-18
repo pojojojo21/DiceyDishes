@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: 
   effect: Purchase the top card of the recipe deck immediately for 0 coins. It must
     replace this card when Purchasing Recipes.
-  artwork: {fileID: 0}
-  coins: 14
+  ability: 
+  basePrice: 14
+  totalValue: 14
   tier: 1
   type: 01000000
   cost: 060000000600000006000000
+  made: 0

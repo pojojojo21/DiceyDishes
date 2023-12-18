@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Sushi
   instant: 
-  effect: If this card is on your menu, you may chose to reroll all of your dice
+  effect: 
+  ability: If this card is on your menu, you may chose to reroll all of your dice
     immediately for 0 coins after your first roll.
-  artwork: {fileID: 0}
-  coins: 12
+  basePrice: 12
+  totalValue: 12
   tier: 2
   type: 00000000
   cost: 00000000020000000e000000
+  made: 0

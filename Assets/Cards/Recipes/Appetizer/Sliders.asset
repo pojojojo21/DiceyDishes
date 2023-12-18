@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: 
   effect: If this is the first recipe you make this round, this recipe counts as
     both an Appetizer and an Entree for all purposes this round.
-  artwork: {fileID: 0}
-  coins: 12
+  ability: 
+  basePrice: 12
+  totalValue: 12
   tier: 2
   type: 02000000
   cost: 060000000600000007000000
+  made: 0

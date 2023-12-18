@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: If this is the first recipe you make this round, you may place a die with
     a result of 2 on this card to increase its value to 20 coins this round.
   effect: 
-  artwork: {fileID: 0}
-  coins: 8
+  ability: 
+  basePrice: 8
+  totalValue: 8
   tier: 2
   type: 02000000
   cost: 0300000003000000
+  made: 0

@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Baked Beans
   instant: 
   effect: If you made at least one Entree this round, this card's value is 10 coins.
-  artwork: {fileID: 0}
-  coins: 6
+  ability: 
+  basePrice: 6
+  totalValue: 6
   tier: 2
   type: 01000000
   cost: 040000000e000000
+  made: 0

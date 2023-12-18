@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Fruit Cup
   instant: 
   effect: Shuffle the shop back into the deck. Deal out a new shop of 5 recipes.
-  artwork: {fileID: 0}
-  coins: 10
+  ability: 
+  basePrice: 10
+  totalValue: 10
   tier: 2
   type: 01000000
   cost: 060000000700000008000000
+  made: 0

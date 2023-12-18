@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: 
   effect: If this is the last recipe you make this round, gain 10 coins if you did
     not make any sides or Appetizers this round.
-  artwork: {fileID: 0}
-  coins: 6
+  ability: 
+  basePrice: 6
+  totalValue: 6
   tier: 2
   type: 03000000
   cost: 060000000b000000
+  made: 0

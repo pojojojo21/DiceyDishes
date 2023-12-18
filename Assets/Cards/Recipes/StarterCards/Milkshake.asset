@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: Your next reroll this round costs 1 coin.
   effect: If this is the last recipe you make this round, its value is increased
     by 6 coins.
-  artwork: {fileID: 0}
-  coins: 4
+  ability: 
+  basePrice: 4
+  totalValue: 4
   tier: 1
   type: 03000000
   cost: 0600000007000000
+  made: 0

@@ -29,7 +29,7 @@ public class ShopDisplay : MonoBehaviour
             // set up card display based on recipe card
             setRecipeDisplays();
             cardNameText.text = recipeCard.name;
-            priceText.text = recipeCard.coins.ToString();
+            priceText.text = recipeCard.basePrice.ToString();
             SetDicePrices();
         }
         else
@@ -46,6 +46,8 @@ public class ShopDisplay : MonoBehaviour
             cardDisplay.SetActive(true);
             recipeCard = GameManagerScript.singleton.shop[cardNumber - 1];
             setRecipeDisplays();
+            cardNameText.text = recipeCard.name;
+            priceText.text = recipeCard.basePrice.ToString();
             SetDicePrices();
         }
         else

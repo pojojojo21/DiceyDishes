@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: 
   effect: Move one of your Recipes down 1 track on your Menu. You cannot choose a
     Recipe already on the bottom track.
-  artwork: {fileID: 0}
-  coins: 20
+  ability: 
+  basePrice: 20
+  totalValue: 20
   tier: 2
   type: 00000000
   cost: 04000000050000000e0000000e000000
+  made: 0

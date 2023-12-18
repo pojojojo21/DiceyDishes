@@ -16,8 +16,9 @@ MonoBehaviour:
   instant: 
   effect: The values of each of your Appetizers and Desserts are increased by 4 coins
     this round.
-  artwork: {fileID: 0}
-  coins: 10
+  ability: 
+  basePrice: 10
+  totalValue: 10
   tier: 2
   type: 00000000
   cost: 050000000600000006000000

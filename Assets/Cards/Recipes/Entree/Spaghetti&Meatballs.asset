@@ -15,8 +15,9 @@ MonoBehaviour:
   name: Spaghetti & Meatballs
   instant: Remove the 6 on this card, and treat it as an unused die.
   effect: 
-  artwork: {fileID: 0}
-  coins: 4
+  ability: 
+  basePrice: 4
+  totalValue: 4
   tier: 2
   type: 00000000
   cost: 050000000e000000

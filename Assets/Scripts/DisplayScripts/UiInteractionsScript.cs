@@ -32,7 +32,7 @@ public class UiInteractionsScript : MonoBehaviour
 
     private string textParser;
     List<int> selectedDiceIndices = new List<int>();
-    RecipeCard cardBought;
+
 
     // Start is called before the first frame update
     void Start()
@@ -88,9 +88,11 @@ public class UiInteractionsScript : MonoBehaviour
                 ClearUserMessage();
 
                 GameManagerScript.singleton.StartRound();
+                SetActiveDice();
+                updateDice();
             }
 
-            if (textInput.text.Contains("Buy") && GameManagerScript.singleton.currentPhase == 2)
+            if (textInput.text.Contains("Buy") && GameManagerScript.singleton.currentPhase == 2 && player.playerDieCount < 4)
             {
                 // Find dice value
                 int diceValue;
@@ -104,6 +106,30 @@ public class UiInteractionsScript : MonoBehaviour
             if (textInput.text.Contains("Roll") && GameManagerScript.singleton.currentPhase == 2)
             {
                 RollDice();
+            }
+
+            if (textInput.text.Contains("Reroll") && GameManagerScript.singleton.currentPhase == 2)
+            {
+                if (player.playerBalance >= 3 - player.rerollBoost && selectedDiceIndices.Count > 0)
+                {
+                    player.playerBalance -= 3 - player.rerollBoost;
+
+                    foreach (int i in selectedDiceIndices)
+                    {
+                        ReRollDie(i);
+                    }
+                    DeSelectAllDice();
+
+                    // updates dice displayed to the screen
+                    updateDice();
+
+                    player.rerollBoost = 0;
+                }
+                else
+                {
+                    userMessages.text = "Not enough coins";
+                    Invoke("ClearUserMessage", 2);
+                }
             }
 
             if (textInput.text.Contains("Make") && GameManagerScript.singleton.currentPhase == 2)
@@ -120,8 +146,10 @@ public class UiInteractionsScript : MonoBehaviour
                     diceType t = DiceTypeFromString(diceDisplayList[i].GetComponentInChildren<TextMeshProUGUI>().text);
                     list.Add(t);
                 }
+
+                RecipeCard r = player.playerRecipeCards[cardIndex];
                 // check if dice selected meet recipe requirements
-                bool check = player.playerRecipeCards[cardIndex].VerifyDice(list);
+                bool check = r.VerifyDice(list);
                 if (check)
                 {
                     Debug.Log("Make Recipe");
@@ -129,10 +157,17 @@ public class UiInteractionsScript : MonoBehaviour
                     {
                         diceDisplayList[i].SetActive(false);
                     }
-                    selectedDiceIndices.Clear();
-                    player.recipeMade[cardIndex] = true;
-                    player.playerRecipeCards[cardIndex].made = true;
+                    DeSelectAllDice();
 
+                    player.recipeMade[cardIndex] = true;
+                    r.made = true;
+                    player.recipeOrderMade.Add(r);
+
+                    // evaluate instants
+                    if (r.instant.Length > 0)
+                    {
+                        r.effectFunction.Effect(r, player);
+                    }
                 }
                 else
                 {
@@ -150,67 +185,121 @@ public class UiInteractionsScript : MonoBehaviour
                 textParser = textParser.Remove(textParser.Length - 1, 1);
                 int.TryParse(textParser, out diceIndex);
 
-                // check if selected dice is active
-                if (!diceDisplayList[diceIndex].activeSelf)
-                {
-                    userMessages.text = "Not an Active Dice";
-
-                    Invoke("ClearUserMessage", 3);
-
-                } else
-                {
-                    // add selected dice to list
-                    selectedDiceIndices.Add(diceIndex);
-
-                    // set selected dice green
-                    diceDisplayList[diceIndex].GetComponentInChildren<Image>().color = Color.green;
-                }
+                // select die
+                SelectDie(diceIndex);
             }
 
             if (textInput.text.Contains("Deselect") && GameManagerScript.singleton.currentPhase == 2)
             {
-                // Find dice value
+                // Find die value
                 int diceIndex;
                 textParser = textInput.text.Replace("Deselect ", "");
                 textParser = textParser.Remove(textParser.Length - 1, 1);
                 int.TryParse(textParser, out diceIndex);
 
                 // deselect dice
-
-                // remove selected dice from list
-                if (selectedDiceIndices.Contains(diceIndex))
-                {
-                    selectedDiceIndices.Remove(diceIndex);
-                    // set selected dice green
-                    diceDisplayList[diceIndex].GetComponentInChildren<Image>().color = Color.black;
-                } else
-                {
-                    userMessages.text = "Dice Not Selected";
-
-                    Invoke("ClearUserMessage", 3);
-                }
+                DeSelectDie(diceIndex);
             }
 
             if (textInput.text.Contains("Ready") && GameManagerScript.singleton.currentPhase == 2)
             {
                 // phase 2 over 
+                SetDiceInactive();
 
                 // set this player as ready
 
                 // when all players are ready or in our single player version currently end phase
                 GameManagerScript.singleton.currentPhase = 3;
 
-                // initialized Recipe Resolution - turn into loop through all players
-                int moneyEarned = player.ResolveRecipes();
+                // evaluate all recipe effects that do not take inputs
+                // if evaluation waits on input finish effect in Select
+                List<RecipeCard> made = new List<RecipeCard>();
+                foreach (RecipeCard card in player.recipeOrderMade)
+                {
+                    if (card.effect.Length > 0)
+                    {
+                        if (!card.input)
+                        {
+                            card.effectFunction.Effect(card, player);
+                            made.Add(card);
+                        }
+                    }
+                    else
+                    {
+                        made.Add(card);
+                    }
+                }
 
-                userMessages.text = "You earned " + moneyEarned + " coins.";
+                foreach (RecipeCard card in made)
+                {
+                    player.recipeOrderMade.Remove(card);
+                }
 
-                Invoke("ClearUserMessage", 3);
+                // else resolve recipes here
+                if (player.recipeOrderMade.Count == 0)
+                {
+                    // initialized Recipe Resolution - turn into loop through all players
+                    int moneyEarned = player.ResolveRecipes();
 
-                GameManagerScript.singleton.currentPhase = 4;
+                    userMessages.text = "You earned " + moneyEarned + " coins.";
+
+                    Invoke("ClearUserMessage", 3);
+
+                    GameManagerScript.singleton.currentPhase = 4;
+                } else
+                {
+                    userMessages.text = "Select Recipe to use effect from " + player.recipeOrderMade[0].name;
+
+                    Invoke("ClearUserMessage", 2);
+                }
             }
 
-            if ((textInput.text.Contains("Buy")) && (GameManagerScript.singleton.currentPhase == 4) && (!cardBought))
+            if (textInput.text.Contains("Select") && GameManagerScript.singleton.currentPhase == 3)
+            {
+                // Find recipe card value
+                int cardIndex;
+                textParser = textInput.text.Replace("Select ", "");
+                textParser = textParser.Remove(textParser.Length - 1, 1);
+                int.TryParse(textParser, out cardIndex);
+
+                if (cardIndex < 0 || cardIndex > 4)
+                {
+                    userMessages.text = "Card input out of range.";
+                    Invoke("ClearUserMessage", 2);
+                    return;
+                }
+
+                // set input 
+                RecipeCard card = player.recipeOrderMade[0];
+                card.inputCard = player.playerRecipeCards[cardIndex];
+
+                // run effect
+                card.effectFunction.Effect(card, player);
+
+                card.inputCard = null;
+                player.recipeOrderMade.Remove(card);
+
+                // else resolve recipes here
+                if (player.recipeOrderMade.Count == 0)
+                {
+                    // initialized Recipe Resolution - turn into loop through all players
+                    int moneyEarned = player.ResolveRecipes();
+
+                    userMessages.text = "You earned " + moneyEarned + " coins.";
+
+                    Invoke("ClearUserMessage", 3);
+
+                    GameManagerScript.singleton.currentPhase = 4;
+                }
+                else
+                {
+                    userMessages.text = "Select Recipe to use effect from " + player.recipeOrderMade[0].name;
+
+                    Invoke("ClearUserMessage", 2);
+                }
+            }
+
+            if ((textInput.text.Contains("Buy")) && (GameManagerScript.singleton.currentPhase == 4) && (!player.cardBought))
             {
                 // Find recipe card value
                 int cardIndex;
@@ -218,13 +307,16 @@ public class UiInteractionsScript : MonoBehaviour
                 textParser = textParser.Remove(textParser.Length - 1, 1);
                 int.TryParse(textParser, out cardIndex);
 
-                cardBought = GameManagerScript.singleton.shop[cardIndex];
-                GameManagerScript.singleton.shop.Remove(cardBought);
-
-                userMessages.text = "Discard a card from your hand.";
+                if (cardIndex < 0 || cardIndex > 4)
+                {
+                    userMessages.text = "Card input out of range.";
+                    Invoke("ClearUserMessage", 2);
+                    return;
+                }
+                BuyRecipe(cardIndex);
             }
 
-            if ((textInput.text.Contains("Discard")) && (GameManagerScript.singleton.currentPhase == 4) && (cardBought))
+            if ((textInput.text.Contains("Discard")) && (GameManagerScript.singleton.currentPhase == 4) && (player.cardBought))
             {
                 // Find recipe card value
                 int cardIndex;
@@ -232,15 +324,23 @@ public class UiInteractionsScript : MonoBehaviour
                 textParser = textParser.Remove(textParser.Length - 1, 1);
                 int.TryParse(textParser, out cardIndex);
 
-                player.playerRecipeCards[cardIndex] = cardBought;
-                cardBought = null;
+                if (cardIndex < 0 || cardIndex > 4)
+                {
+                    userMessages.text = "Card input out of range.";
+                    Invoke("ClearUserMessage", 2);
+                } else
+                {
+                    player.playerRecipeCards[cardIndex] = player.cardBought;
+                    player.cardBought = null;
+                    player.shopBoost = 0;
 
-                GameManagerScript.singleton.currentPhase = 1;
-                GameManagerScript.singleton.round++;
+                    GameManagerScript.singleton.currentPhase = 1;
+                    GameManagerScript.singleton.round++;
 
-                userMessages.text = "Round Over: \"Start Round\"";
+                    userMessages.text = "Round Over: \"Start Round\"";
 
-                Invoke("ClearUserMessage", 3);
+                    Invoke("ClearUserMessage", 3);
+                }
             }
         }
     }
@@ -356,6 +456,46 @@ public class UiInteractionsScript : MonoBehaviour
 
     // Player Actions
 
+    // BUY SHOP RECIPE
+    // * if player has the money and recipe number is a valid input *
+    // Output: set recipe bought 
+    void BuyRecipe(int recipeNumber)
+    {
+        // buy card from shop 0-4, off top of deck 5
+        if (recipeNumber == 5)
+        {
+            if (player.playerBalance >= 3 - player.shopBoost)
+            {
+                player.playerBalance -= 3 - player.shopBoost;
+                player.cardBought = GameManagerScript.singleton.BuyFromDeck();
+            } else
+            {
+                userMessages.text = "Not enoguh coins.";
+
+                Invoke("ClearUserMessage", 2);
+                return;
+            }
+            
+        } else if (recipeNumber > 0 && recipeNumber < 5)
+        {
+            if (player.playerBalance >= 4 - player.shopBoost)
+            {
+                player.playerBalance -= 4 - player.shopBoost;
+                player.cardBought = GameManagerScript.singleton.shop[recipeNumber];
+                GameManagerScript.singleton.shop.Remove(player.cardBought);
+            } else
+            {
+                userMessages.text = "Not enoguh coins.";
+
+                Invoke("ClearUserMessage", 2);
+                return;
+            }
+        }
+        
+
+        userMessages.text = "Discard a card from your hand.";
+    }
+
     // BUY DICE
     // Input: int for number of dice to buy
     // * if player has the money and dice number is a valid input *
@@ -365,22 +505,59 @@ public class UiInteractionsScript : MonoBehaviour
         switch (diceNumber)
         {
             case 1:
-                player.playerDieCount = 4;
+                if (player.playerBalance >= 3)
+                {
+                    player.playerBalance -= 3;
+                    player.playerDieCount = 4;
+                    break;
+                }
+                userMessages.text = "Not enough coins";
+                Invoke("ClearUserMessage", 2);
                 break;
             case 2:
-                player.playerDieCount = 5;
+                if (player.playerBalance >= 8)
+                {
+                    player.playerBalance -= 8;
+                    player.playerDieCount = 5;
+                    break;
+                }
+                userMessages.text = "Not enough coins";
+                Invoke("ClearUserMessage", 2);
                 break;
             case 3:
-                player.playerDieCount = 6;
+                if (player.playerBalance >= 15)
+                {
+                    player.playerBalance -= 15;
+                    player.playerDieCount = 6;
+                    break;
+                }
+                userMessages.text = "Not enough coins";
+                Invoke("ClearUserMessage", 2);
                 break;
             case 4:
-                player.playerDieCount = 7;
+                if (player.playerBalance >= 24)
+                {
+                    player.playerBalance -= 24;
+                    player.playerDieCount = 7;
+                    break;
+                }
+                userMessages.text = "Not enough coins";
+                Invoke("ClearUserMessage", 2);
                 break;
             case 5:
-                player.playerDieCount = 8;
+                if (player.playerBalance >= 35)
+                {
+                    player.playerBalance -= 35;
+                    player.playerDieCount = 8;
+                    break;
+                }
+                userMessages.text = "Not enough coins";
+                Invoke("ClearUserMessage", 2);
                 break;
             default:
                 // not a valid dice count
+                userMessages.text = "Not a valid dice purchase";
+                Invoke("ClearUserMessage", 2);
                 break;
         }
 
@@ -412,12 +589,69 @@ public class UiInteractionsScript : MonoBehaviour
     }
 
     // REROLL SPECIFIC DIE
-    void ReRollDie(int id)
+    void ReRollDie(int die)
     {
-        player.playerDiceList[id] = RandomDiceEnumGen();
+        // check if selected dice is active
+        if (!diceDisplayList[die].activeSelf)
+        {
+            userMessages.text = "Not an Active Dice";
 
-        // updates dice displayed to the screen
-        updateDice();
+            Invoke("ClearUserMessage", 3);
+
+        }
+        else
+        {
+            // generate new number
+            player.playerDiceList[die] = RandomDiceEnumGen();
+        }
+    }
+
+    void SelectDie(int die)
+    {
+        // check if selected dice is active
+        if (!diceDisplayList[die].activeSelf)
+        {
+            userMessages.text = "Not an Active Dice";
+
+            Invoke("ClearUserMessage", 3);
+
+        }
+        else
+        {
+            // add selected dice to list
+            selectedDiceIndices.Add(die);
+
+            // set selected dice green
+            diceDisplayList[die].GetComponentInChildren<Image>().color = Color.green;
+        }
+    }
+
+    void DeSelectDie(int die)
+    {
+        // remove selected dice from list
+        if (selectedDiceIndices.Contains(die))
+        {
+            selectedDiceIndices.Remove(die);
+            // set selected dice back to black
+            diceDisplayList[die].GetComponentInChildren<Image>().color = Color.black;
+        }
+        else
+        {
+            userMessages.text = "Dice Not Selected";
+
+            Invoke("ClearUserMessage", 3);
+        }
+    }
+
+    void DeSelectAllDice()
+    {
+        foreach (int die in selectedDiceIndices)
+        {
+            // set selected dice back to black
+            diceDisplayList[die].GetComponentInChildren<Image>().color = Color.black;
+        }
+
+        selectedDiceIndices.Clear();
     }
 
     // Generates a random dice enum

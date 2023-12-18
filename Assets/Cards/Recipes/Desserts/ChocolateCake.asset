@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Chocolate Cake
   instant: 
   effect: Move all of your other Desserts down one track on your Menu.
-  artwork: {fileID: 0}
-  coins: 22
+  ability: 
+  basePrice: 22
+  totalValue: 22
   tier: 2
   type: 03000000
   cost: 06000000090000000a0000000b000000
+  made: 0

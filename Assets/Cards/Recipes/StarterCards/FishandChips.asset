@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Fish and Chips
   instant: 
   effect: The next recipe you purchase this round costs 3 coins less.
-  artwork: {fileID: 0}
-  coins: 8
+  ability: 
+  basePrice: 8
+  totalValue: 8
   tier: 1
   type: 00000000
   cost: 0600000006000000
+  made: 0

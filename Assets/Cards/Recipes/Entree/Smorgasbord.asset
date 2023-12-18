@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Smorgasbord
   instant: 
   effect: 
-  artwork: {fileID: 0}
-  coins: 46
+  ability: 
+  basePrice: 46
+  totalValue: 46
   tier: 2
   type: 00000000
   cost: 000000000100000002000000030000000400000005000000
+  made: 0

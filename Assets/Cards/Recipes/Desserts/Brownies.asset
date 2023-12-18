@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: Reroll all of your remaining dice for 0 coins.
   effect: If this is the last recipe you make this round, increase its value by 4
     this round.
-  artwork: {fileID: 0}
-  coins: 12
+  ability: 
+  basePrice: 12
+  totalValue: 12
   tier: 2
   type: 03000000
   cost: 060000000600000007000000
+  made: 0

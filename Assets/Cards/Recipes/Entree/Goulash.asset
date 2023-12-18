@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Goulash
   instant: 
-  effect: This recipe can be made once per round with 1 or more dice. Its base value
+  effect: 
+  ability: This recipe can be made once per round with 1 or more dice. Its base value
     is the sum of the dice used to make it this round. When multiplying this card's
     value, round up.
-  artwork: {fileID: 0}
-  coins: 0
+  basePrice: 0
+  totalValue: 0
   tier: 2
   type: 00000000
   cost: 0e000000
+  made: 0

@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: 
   effect: If this is the last recipe you make this round, move another Recipe up
     1 track on your Menu.
-  artwork: {fileID: 0}
-  coins: 8
+  ability: 
+  basePrice: 8
+  totalValue: 8
   tier: 2
   type: 03000000
   cost: 010000000e000000
+  made: 0

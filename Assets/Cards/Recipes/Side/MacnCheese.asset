@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Mac n' Cheese
   instant: 
   effect: Move one of your Entrees to the top track of your menu.
-  artwork: {fileID: 0}
-  coins: 6
+  ability: 
+  basePrice: 6
+  totalValue: 6
   tier: 2
   type: 01000000
   cost: 0600000007000000
+  made: 0

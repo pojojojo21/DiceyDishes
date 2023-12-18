@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: 
   effect: You may immediately purchase a Recipe from the discard pile for 5 coins
     (this includes your own discarded starter Recipes)
-  artwork: {fileID: 0}
-  coins: 18
+  ability: 
+  basePrice: 18
+  totalValue: 18
   tier: 2
   type: 00000000
   cost: 0600000007000000080000000e000000
+  made: 0

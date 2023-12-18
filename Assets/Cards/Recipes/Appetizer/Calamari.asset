@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: 
   effect: If this is the first recipe you make this round, the value of the next
     Entree you make this round is increased by 6 coins.
-  artwork: {fileID: 0}
-  coins: 2
+  ability: 
+  basePrice: 2
+  totalValue: 2
   tier: 2
   type: 02000000
   cost: 04000000
+  made: 0

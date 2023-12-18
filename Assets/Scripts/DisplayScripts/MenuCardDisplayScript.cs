@@ -37,7 +37,7 @@ public class MenuCardDisplayScript : MonoBehaviour
         setRecipeDisplays();
 
         cardNameText.text = recipeCard.name;
-        priceText.text = recipeCard.coins.ToString();
+        priceText.text = recipeCard.basePrice.ToString();
     }
 
     private void Update()
@@ -85,7 +85,7 @@ public class MenuCardDisplayScript : MonoBehaviour
         {
             case RecipeCard.cardTier.Bottom:
                 priceText.color = Color.red;
-                this.transform.position = position + (-330 * Vector3.up);
+                this.transform.position = position + (-295 * Vector3.up);
                 break;
             case RecipeCard.cardTier.Mid:
                 priceText.color = Color.white;
@@ -93,7 +93,7 @@ public class MenuCardDisplayScript : MonoBehaviour
                 break;
             case RecipeCard.cardTier.Top:
                 priceText.color = Color.blue;
-                this.transform.position = position + (330 * Vector3.up);
+                this.transform.position = position + (295 * Vector3.up);
                 break;
         }
 

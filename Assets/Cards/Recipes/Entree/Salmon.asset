@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Salmon
   instant: 
   effect: 
-  artwork: {fileID: 0}
-  coins: 18
+  ability: 
+  basePrice: 18
+  totalValue: 18
   tier: 2
   type: 00000000
   cost: 01000000010000000e000000
+  made: 0

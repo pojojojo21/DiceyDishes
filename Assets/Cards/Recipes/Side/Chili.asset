@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: 
   effect: 'Move all of the recipes on your bottom track (excluding Chili) to your
     middle track. '
-  artwork: {fileID: 0}
-  coins: 14
+  ability: 
+  basePrice: 14
+  totalValue: 14
   tier: 2
   type: 01000000
   cost: 060000000600000006000000
+  made: 0

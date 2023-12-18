@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Pizza
   instant: 
-  effect: This Recipe cannot fall into your bottom track.
-  artwork: {fileID: 0}
-  coins: 18
+  effect: 
+  ability: This Recipe cannot fall into your bottom track.
+  basePrice: 18
+  totalValue: 18
   tier: 2
   type: 00000000
   cost: 0000000001000000020000000e000000
+  made: 0

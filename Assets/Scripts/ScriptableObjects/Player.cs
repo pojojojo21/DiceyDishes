@@ -12,12 +12,23 @@ public class Player : ScriptableObject
     public List<RecipeCard> playerRecipeCards = new List<RecipeCard>(5);
     public List<RecipeCard.diceType> playerDiceList = new List<RecipeCard.diceType>(8);
     public List<bool> recipeMade = new List<bool>(5);
+    
+    // effect variables
+    public List<RecipeCard> recipeOrderMade = new List<RecipeCard>();
+    public int rerollBoost;
+    public int shopBoost;
+    public RecipeCard cardBought;
+    public int cardReplaced;
 
     private void OnEnable()
     {
         playerBalance = 20;
         playerDieCount = 3;
-
+        recipeOrderMade.Clear();
+        rerollBoost = 0;
+        shopBoost = 0;
+        cardBought = null;
+        cardReplaced = -1;
         InitializeDiceList();
     }
 
@@ -63,6 +74,7 @@ public class Player : ScriptableObject
     public int ResolveRecipes()
     {
         int moneyEarned = 0;
+        rerollBoost = 0;
 
         for (int i = 0;i < this.recipeMade.Count;i++)
         {
@@ -81,7 +93,7 @@ public class Player : ScriptableObject
                 }
 
                 // add recipe amount to total
-                moneyEarned += (int)Mathf.Ceil(r.coins * multiplier);
+                moneyEarned += (int)Mathf.Ceil(r.totalValue * multiplier);
 
                 // move card tier down
                  r.MoveDown();
@@ -92,7 +104,23 @@ public class Player : ScriptableObject
             }
         }
 
+        recipeOrderMade.Clear();
+
+        for (int i = 0; i < 5; i++)
+        {
+            playerRecipeCards[i].totalValue = playerRecipeCards[i].basePrice;
+        }
+
         playerBalance += moneyEarned;
+
+        // check if card needs to be replaced
+        if (this.cardBought)
+        {
+            this.playerRecipeCards[this.cardReplaced] = this.cardBought;
+            this.cardBought = null;
+            this.cardReplaced = -1;
+        }
+
         return moneyEarned;
     }
 

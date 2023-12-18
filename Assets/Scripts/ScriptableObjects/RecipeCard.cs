@@ -8,10 +8,15 @@ public class RecipeCard : ScriptableObject
     public new string name;
     public string instant;
     public string effect;
+    public string ability;
+    public RecipeEffects effectFunction;
 
-    public Sprite artwork;
+    // effects where input card is needed
+    public bool input; // does this recipe take input
+    public RecipeCard inputCard;
 
-    public int coins;
+    public int basePrice;
+    public int totalValue;
     public cardTier tier;
     public List<recipeType> type;
     public List<diceType> cost;
@@ -73,8 +78,11 @@ public class RecipeCard : ScriptableObject
         card.name = name;
         card.instant = instant;
         card.effect = effect;
-        card.coins = coins;
+        card.ability = ability;
+        card.basePrice = basePrice;
+        card.totalValue = basePrice;
         card.tier = tier;
+        card.SetEffect();
         List<recipeType> t = new List<recipeType>();
         foreach (recipeType type in type)
         {
@@ -495,6 +503,89 @@ public class RecipeCard : ScriptableObject
                 return PlusPlus(dice);
             default:
                 return diceType.Question;
+        }
+    }
+
+    // find recipe effect for this recipe card
+    void SetEffect()
+    {
+        switch (name)
+        {
+            case "Milkshake":
+                effectFunction = new Milkshake();
+                break;
+            case "Fish and Chips":
+                effectFunction = new FishandChips();
+                break;
+            case "Garbage Plate":
+                effectFunction = new GarbagePlate();
+                break;
+            case "Side Salad":
+                effectFunction = new SideSalad();
+                input = true;
+                break;
+            case "Scrambled Eggs":
+                effectFunction = new ScrambledEggs();
+                break;
+            case "Calamari":
+                effectFunction = new Calamari();
+                break;
+            case "Chips and Dip":
+                effectFunction = new ChipsandDip();
+                break;
+            case "Deviled Eggs":
+                effectFunction = new DeviledEggs();
+                break;
+            case "Fried Shrimp":
+                effectFunction = new FriedShrimp();
+                break;
+            case "Loaded Nachos":
+                effectFunction = new LoadedNachos();
+                break;
+            case "Loaded Tots":
+                effectFunction = new LoadedTots();
+                break;
+            case "Mozzarella Sticks":
+                effectFunction = new MozzarellaSticks();
+                break;
+            case "Pretzel Bites":
+                effectFunction = new PretzelBites();
+                break;
+            case "Sliders":
+                effectFunction = new Sliders();
+                break;
+            case "Wings":
+                effectFunction = new Wings();
+                break;
+            case "Brownies":
+                effectFunction = new Brownies();
+                break;
+            case "Chocolate Cake":
+                effectFunction = new ChocolateCake();
+                break;
+            case "Chocolate Chip Cookies":
+                effectFunction = new ChocolateChipCookies();
+                break;
+            case "Chocolate Milk":
+                effectFunction = new ChocolateMilk();
+                break;
+            case "Churros":
+                effectFunction = new Churros();
+                break;
+            case "Macarons":
+                effectFunction = new Macarons();
+                break;
+            case "Mochi":
+                effectFunction = new Mochi();
+                input = true;
+                break;
+            case "Strawberry Sundae":
+                effectFunction = new StrawberrySundae();
+                input = true;
+                break;
+            case "Vanilla Scoop":
+                effectFunction = new VanillaScoop();
+                break;
         }
     }
 }

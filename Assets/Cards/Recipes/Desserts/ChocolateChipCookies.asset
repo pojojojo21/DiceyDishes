@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: 
   effect: If this is the last recipe you make this round, gain 5 coins, otherwise,
     give each player 1 coin.
-  artwork: {fileID: 0}
-  coins: 16
+  ability: 
+  basePrice: 16
+  totalValue: 16
   tier: 2
   type: 03000000
   cost: 000000000100000004000000
+  made: 0

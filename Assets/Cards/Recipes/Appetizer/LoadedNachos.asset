@@ -16,8 +16,10 @@ MonoBehaviour:
   instant: 
   effect: If this is the first recipe you make this round, its value this round is
     22 coins.
-  artwork: {fileID: 0}
-  coins: 14
+  ability: 
+  basePrice: 14
+  totalValue: 14
   tier: 2
   type: 02000000
   cost: 020000000300000005000000
+  made: 0
