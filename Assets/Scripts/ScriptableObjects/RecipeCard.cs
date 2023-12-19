@@ -30,6 +30,11 @@ public class RecipeCard : ScriptableObject
 
     public void MoveDown()
     {
+        if (this.name == "Grilled Cheese")
+        {
+            return;
+        }
+
         switch (this.tier)
         {
             case cardTier.Mid:
@@ -47,6 +52,16 @@ public class RecipeCard : ScriptableObject
 
     public void MoveUp()
     {
+        if (this.name == "Grilled Cheese")
+        {
+            return;
+        }
+
+        if (this.name == "Pizza" && this.tier == cardTier.Mid)
+        {
+            return;
+        }
+
         switch (this.tier)
         {
             case cardTier.Mid:
@@ -82,6 +97,7 @@ public class RecipeCard : ScriptableObject
         card.basePrice = basePrice;
         card.totalValue = basePrice;
         card.tier = tier;
+        card.input = input;
         card.SetEffect();
         List<recipeType> t = new List<recipeType>();
         foreach (recipeType type in type)
@@ -175,6 +191,16 @@ public class RecipeCard : ScriptableObject
 
     public bool VerifyDice(List<diceType> dice)
     {
+        if (this.name == "Goulash" && dice.Count > 0)
+        {
+            this.cost.Clear();
+            foreach (diceType diceType in dice)
+            {
+                this.cost.Add(diceType);
+            }
+            return true;
+        }
+
         // make dictionary of die rolls
         Dictionary<diceType, int> rollsDict = makeDict(dice);
 
@@ -530,9 +556,6 @@ public class RecipeCard : ScriptableObject
             case "Calamari":
                 effectFunction = new Calamari();
                 break;
-            case "Chips and Dip":
-                effectFunction = new ChipsandDip();
-                break;
             case "Deviled Eggs":
                 effectFunction = new DeviledEggs();
                 break;
@@ -579,12 +602,53 @@ public class RecipeCard : ScriptableObject
                 effectFunction = new Mochi();
                 input = true;
                 break;
-            case "Strawberry Sundae":
-                effectFunction = new StrawberrySundae();
-                input = true;
-                break;
             case "Vanilla Scoop":
                 effectFunction = new VanillaScoop();
+                break;
+            case "Bacon Cheeseburger":
+                effectFunction = new BaconCheeseburger();
+                break;
+            case "Curry":
+                effectFunction = new Curry();
+                input = true;
+                break;
+            case "Glazed Ham":
+                effectFunction = new GlazedHam();
+                break;
+            case "Golden Lobster":
+                effectFunction = new GoldenLobster();
+                break;
+            case "Goulash":
+                effectFunction = new Goulash();
+                break;
+            case "Pulled Pork":
+                effectFunction = new PulledPork();
+                break;
+            case "Sushi":
+                effectFunction = new Sushi();
+                break;
+            case "Apple Slices":
+                effectFunction = new AppleSlices();
+                break;
+            case "Baked Beans":
+                effectFunction = new BakedBeans();
+                break;
+            case "Chicken Noodle Soup":
+                effectFunction = new ChickenNoodleSoup();
+                input = true;
+                break;
+            case "Chili":
+                effectFunction = new Chili();
+                break;
+            case "Mac n' Cheese":
+                effectFunction = new MacnCheese();
+                input = true;
+                break;
+            case "Mashed Potatoes":
+                effectFunction = new MashedPotatoes();
+                break;
+            case "Steak Fries":
+                effectFunction = new SteakFries();
                 break;
         }
     }

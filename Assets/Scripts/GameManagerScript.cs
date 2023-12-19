@@ -31,6 +31,9 @@ public class GameManagerScript : MonoBehaviour
     // current round
     public int round = 1;
 
+    // current objective
+    public string objective;
+
     // Startup of Game
     private void Start()
     {
@@ -55,6 +58,9 @@ public class GameManagerScript : MonoBehaviour
 
         // set round to 1
         round = 1;
+
+        // set first objective
+        objective = "Earn 14 or more coins each from 3 or more recipes in one round.";
     }
 
     // Update is called once per frame
@@ -70,6 +76,9 @@ public class GameManagerScript : MonoBehaviour
 
             // update user hand
             UpdateUserHand();
+
+            // update objective
+            updateObjective();
         }
     }
 
@@ -101,8 +110,8 @@ public class GameManagerScript : MonoBehaviour
         // Set up critic deck
         SetUpCriticDeck();
 
-        // When finished set up, start first round
-        Debug.Log("Game set up complete");
+        // Set first objective
+        objective = "Earn 14 or more coins each from 3 or more recipes in one round.";
 
         // set current phase to 1
         currentPhase = 1;
@@ -196,7 +205,7 @@ public class GameManagerScript : MonoBehaviour
     }
 
     // Fill all empty slots in shop
-    void FillShop()
+    public void FillShop()
     {
         Debug.Log("Fill recipe shop");
         for (int i = shop.Count; i < 5; i++) // from index where shop starts building up until shop is at length 5
@@ -240,5 +249,20 @@ public class GameManagerScript : MonoBehaviour
         RecipeCard r = recipeDeck[i];
         recipeDeck.Remove(r);
         return r;
+    }
+
+    public void updateObjective()
+    {
+        if (players[user].stars == 0)
+        {
+            objective = "Earn 14 or more coins each from 3 or more recipes in one round.";
+        }
+        else if (players[user].stars == 1)
+        {
+            objective = "Earn 30 coins or more from a single recipe in one round.";
+        } else if (players[user].stars == 2)
+        {
+            objective = "Earn 50 coins or more in one round.";
+        }
     }
 }

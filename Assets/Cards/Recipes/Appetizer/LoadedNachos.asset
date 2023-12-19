@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: LoadedNachos
   m_EditorClassIdentifier: 
   name: Loaded Nachos
-  instant: 
-  effect: If this is the first recipe you make this round, its value this round is
-    22 coins.
+  instant: If this is the first recipe you make this round, its value this round
+    is 22 coins.
+  effect: 
   ability: 
+  input: 0
+  inputCard: {fileID: 0}
   basePrice: 14
   totalValue: 14
   tier: 2

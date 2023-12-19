@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Chicken Noodle Soup
   instant: 
-  effect: Take a recipe from the shop. After Resolving Recipes, place this card in
-    the shop, and place the taken recipe in the same track that this card was in.
+  effect: Take a recipe from the shop and replace this recipe in the same track that
+    this card was in.
   ability: 
+  input: 1
+  inputCard: {fileID: 0}
   basePrice: 14
   totalValue: 14
   tier: 2

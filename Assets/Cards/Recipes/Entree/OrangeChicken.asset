@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Orange Chicken
   instant: 
-  effect: Look at the top card of the critic deck, and then put it back.
+  effect: 
   ability: 
+  input: 0
+  inputCard: {fileID: 0}
   basePrice: 30
   totalValue: 30
   tier: 2

@@ -16,6 +16,8 @@ MonoBehaviour:
   instant: 
   effect: Move another Recipe up 1 track on your Menu.
   ability: 
+  input: 1
+  inputCard: {fileID: 0}
   basePrice: 10
   totalValue: 10
   tier: 1

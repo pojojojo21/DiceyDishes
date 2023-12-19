@@ -15,8 +15,10 @@ MonoBehaviour:
   name: Chocolate Chip Cookies
   instant: 
   effect: If this is the last recipe you make this round, gain 5 coins, otherwise,
-    give each player 1 coin.
+    lose 3 coins.
   ability: 
+  input: 0
+  inputCard: {fileID: 0}
   basePrice: 16
   totalValue: 16
   tier: 2

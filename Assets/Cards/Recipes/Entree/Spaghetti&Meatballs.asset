@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: Spaghetti&Meatballs
   m_EditorClassIdentifier: 
   name: Spaghetti & Meatballs
-  instant: Remove the 6 on this card, and treat it as an unused die.
+  instant: 
   effect: 
-  ability: 
+  ability: When making this recipe, remove the 6 on this card, and treat it as an
+    unused die.
+  input: 0
+  inputCard: {fileID: 0}
   basePrice: 4
   totalValue: 4
   tier: 2

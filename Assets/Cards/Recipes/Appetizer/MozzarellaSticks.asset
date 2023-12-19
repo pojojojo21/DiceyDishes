@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: MozzarellaSticks
   m_EditorClassIdentifier: 
   name: Mozzarella Sticks
-  instant: If this is the first recipe you make this round, you may place a die with
-    a result of 2 on this card to increase its value to 20 coins this round.
+  instant: If this is the first recipe you make this round, its value is increased
+    to 20 coins this round.
   effect: 
   ability: 
+  input: 0
+  inputCard: {fileID: 0}
   basePrice: 8
   totalValue: 8
   tier: 2

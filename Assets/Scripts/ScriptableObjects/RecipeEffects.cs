@@ -132,11 +132,8 @@ public class DeviledEggs : RecipeEffects
         // If this is the first recipe you make this round,
         if (p.recipeOrderMade[0].name == r.name)
         {
-            // Next reroll costs 0 coins.
+            // your next reroll this round costs 0 coins.
             p.rerollBoost = 3;
-
-            // NOT FULLY IMMPLEMENTED
-            // immediately reroll up to 3 of your remaining dice.
         }
     }
 }
@@ -191,11 +188,8 @@ public class MozzarellaSticks : RecipeEffects
         // If this is the first recipe you make this round,
         if (p.recipeOrderMade[0].name == r.name)
         {
-            // you may place a die with a result of 2 on this card
-            // to increase its value to 20 coins this round.
+            // its value is increased to 20 coins this round.
             r.totalValue = 20;
-
-            // NO CHECK FOR DIE INPUT YET
         }
     }
 }
@@ -225,8 +219,6 @@ public class PretzelBites : RecipeEffects
 
 public class Sliders : RecipeEffects
 {
-    // If this is the first recipe you make this round,
-    // this recipe counts as both an Appetizer and an Entree for all purposes this round.
     public void Effect(RecipeCard r, Player p)
     {
         // EFFECT
@@ -234,9 +226,7 @@ public class Sliders : RecipeEffects
         if (p.recipeOrderMade[0].name == r.name)
         {
             // this recipe counts as both an Appetizer and an Entree for all purposes this round.
-            // r.tier.Add(RecipeCard.recipeType.Entree)
-            // need a way of removing tier at end of round
-            // NOT IMPLEMENTED
+            r.type.Add(RecipeCard.recipeType.Entree);
         }
     }
 }
@@ -265,11 +255,8 @@ public class Brownies : RecipeEffects
         if (GameManagerScript.singleton.currentPhase == 2)
         {
             // INSTANT
-            // Reroll all of your remaining dice for 0 coins.
+            // Next reroll costs 0 coins.
             p.rerollBoost = 3;
-
-            // NOT FULLY IMPLEMENTED
-
         }
         else if (GameManagerScript.singleton.currentPhase == 3)
         {
@@ -314,9 +301,12 @@ public class ChocolateChipCookies : RecipeEffects
         // If this is the last recipe you make this round,
         if (p.recipeOrderMade[p.recipeOrderMade.Count - 1].name == r.name)
         {
-            // gain 5 coins, otherwise, give each player 1 coin.
+            // gain 5 coins,
             p.playerBalance += 5;
-            // no multiplayer yet
+        } else
+        {
+            // otherwise, lose 3 coins.
+            p.playerBalance -= 3;
         }
     }
 }
@@ -330,8 +320,16 @@ public class ChocolateMilk : RecipeEffects
         if (p.recipeOrderMade[p.recipeOrderMade.Count - 1].name == r.name)
         {
             // increase the value of your Dino Nuggets by 12 coins this round.
-            
-            // NOT IMPLEMENTED
+            for (int i = 0; i < 5; i++)
+            {
+                RecipeCard card = p.playerRecipeCards[i];
+
+                if (card.name == "Dino Nuggets")
+                {
+                    card.totalValue += 12;
+                    return;
+                }
+            }
         }
     }
 }
@@ -369,8 +367,8 @@ public class Macarons : RecipeEffects
                     }
                 }
             }
-            // gain 5 coins.
-            p.playerBalance += 5;
+            // gain 10 coins.
+            p.playerBalance += 10;
         }
     }
 }
@@ -430,3 +428,274 @@ public class VanillaScoop : RecipeEffects
     }
 }
 
+public class BaconCheeseburger : RecipeEffects
+{
+    public void Effect(RecipeCard r, Player p)
+    {
+        //EFFECT
+        // If this recipe is in your middle track.
+        if (r.tier == RecipeCard.cardTier.Mid)
+        {
+            // This card's value is increased to 20 coins
+            r.totalValue = 20;
+        }
+    }
+}
+
+public class BakedZiti : RecipeEffects
+{
+    public void Effect(RecipeCard r, Player p)
+    {
+        //EFFECT
+        // Give the Start Player token to a player of your choice.
+        
+        // no multiplayer implementation yet
+    }
+}
+
+public class Curry : RecipeEffects
+{
+    // INPUT
+    public void Effect(RecipeCard r, Player p)
+    {
+        //EFFECT
+        // Move one of your Recipes down 1 track on your Menu.
+        // You cannot choose a Recipe already on the bottom track.
+        r.inputCard.MoveDown();
+    }
+}
+
+public class GlazedHam : RecipeEffects
+{
+    public void Effect(RecipeCard r, Player p)
+    {
+        // EFFECT
+        // The values of each of your Appetizers and Desserts are increased by 4 coins this round.
+        for (int i = 0; i < 5; i++)
+        {
+            RecipeCard card = p.playerRecipeCards[i];
+
+            foreach (RecipeCard.recipeType t in card.type)
+            {
+                if (t == RecipeCard.recipeType.Dessert || t == RecipeCard.recipeType.Appetizer)
+                {
+                    card.totalValue += 4;
+                }
+            }
+        }
+    }
+}
+
+public class GoldenLobster : RecipeEffects
+{
+    public void Effect(RecipeCard r, Player p)
+    {
+        // EFFECT
+        // Earn a star
+        p.stars++;
+    }
+}
+
+public class Goulash : RecipeEffects
+{
+    // This recipe can be made once per round with 1 or more dice.
+    // Its base value is the sum of the dice used to make it this round.
+    // When multiplying this card's value, round up.
+    public void Effect(RecipeCard r, Player p)
+    {
+        r.totalValue = 0;
+        int i;
+        foreach (RecipeCard.diceType dice in r.cost)
+        {
+            int.TryParse(RecipeCard.stringFromDiceType(dice), out i);
+            r.totalValue += i;
+        }
+        r.cost.Clear();
+        r.cost.Add(RecipeCard.diceType.Question);
+    }
+}
+
+public class PulledPork : RecipeEffects
+{
+    public void Effect(RecipeCard r, Player p)
+    {
+        //EFFECT
+        // Increase the value of each of your Sides by 6 this round.
+        for (int i = 0; i < 5; i++)
+        {
+            RecipeCard card = p.playerRecipeCards[i];
+
+            foreach (RecipeCard.recipeType t in card.type)
+            {
+                if (t == RecipeCard.recipeType.Side)
+                {
+                    card.totalValue += 6;
+                }
+            }
+        }
+    }
+}
+
+public class StirFry : RecipeEffects
+{
+    // You may immediately purchase a Recipe from the discard pile for 5 coins
+    // (this includes your own discarded starter Recipes)
+    public void Effect(RecipeCard r, Player p)
+    {
+        // EFFECT
+
+        // NOT IMPLEMENTED
+    }
+}
+
+public class Sushi : RecipeEffects
+{
+    public void Effect(RecipeCard r, Player p)
+    {
+        // INSTANT
+        // Next reroll costs 0 coins.
+        p.rerollBoost = 3;
+    }
+}
+
+public class AppleSlices : RecipeEffects
+{
+
+    public void Effect(RecipeCard r, Player p)
+    {
+        //EFFECT
+        // Increase the value of your Dino Nuggets by 8 coins this round.
+        for (int i = 0; i < 5; i++)
+        {
+            RecipeCard card = p.playerRecipeCards[i];
+
+            if (card.name == "Dino Nuggets")
+            {
+                card.totalValue += 8;
+                return;
+            }
+        }
+    }
+}
+
+public class BakedBeans : RecipeEffects
+{
+    public void Effect(RecipeCard r, Player p)
+    {
+        //EFFECT
+        // If you made at least one Entree this round, this card's value is 10 coins.
+        foreach (RecipeCard card in p.recipeOrderMade)
+        {
+            foreach (RecipeCard.recipeType t in card.type)
+            {
+                if (t == RecipeCard.recipeType.Entree)
+                {
+                    r.totalValue = 10;
+                    return;
+                }
+            }
+        }
+    }
+}
+
+public class ChickenNoodleSoup : RecipeEffects
+{
+    // REQUIRES INPUT
+    public void Effect(RecipeCard r, Player p)
+    {
+        //EFFECT
+        // Take a recipe from the shop
+        // it must replace this card when purchasing recipes in the same track this card was in
+        // find index of this card
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (p.playerRecipeCards[i].name == r.name)
+            {
+                p.cardBought.tier = r.tier;
+                p.cardReplaced = i;
+                break;
+            }
+        }
+    }
+}
+
+public class Chili : RecipeEffects
+{
+    // Move all of the recipes on your bottom track (excluding Chili) to your middle track. 
+    public void Effect(RecipeCard r, Player p)
+    {
+        //EFFECT
+        // Move all of the recipes on your bottom track (excluding Chili) to your middle track. 
+        for (int i = 0; i < 5; i++)
+        {
+            if (p.playerRecipeCards[i].tier == RecipeCard.cardTier.Bottom && p.playerRecipeCards[i].name != r.name)
+            {
+                p.playerRecipeCards[i].MoveUp();
+            }
+        }
+    }
+}
+
+public class MacnCheese : RecipeEffects
+{
+    // REQUIRES INPUT
+    
+    public void Effect(RecipeCard r, Player p)
+    {
+        //EFFECT
+        // Move one of your Entrees to the top track of your menu.
+        r.inputCard.MoveUp();
+        r.inputCard.MoveUp();
+    }
+}
+
+public class MashedPotatoes : RecipeEffects
+{
+    public void Effect(RecipeCard r, Player p)
+    {
+        //EFFECT
+        // The values of each of your Entrees are increased by 6 this round.
+        for (int i = 0; i < 5; i++)
+        {
+            RecipeCard card = p.playerRecipeCards[i];
+
+            foreach (RecipeCard.recipeType t in card.type)
+            {
+                if (t == RecipeCard.recipeType.Entree)
+                {
+                    card.totalValue += 6;
+                }
+            }
+        }
+    }
+}
+
+public class SteakFries : RecipeEffects
+{
+    public void Effect(RecipeCard r, Player p)
+    {
+        //EFFECT
+        // If you made High Quality Steak this round, gain 4 coins.
+        foreach (RecipeCard card in p.recipeOrderMade)
+        {
+            if (card.name == "High Quality Steak")
+            {
+                p.playerBalance += 4;
+            }
+        }
+
+        // If you made at least one Entree this round, gain 6 coins.
+        foreach (RecipeCard card in p.recipeOrderMade)
+        {
+            foreach (RecipeCard.recipeType t in card.type)
+            {
+                if (t == RecipeCard.recipeType.Entree)
+                {
+                    p.playerBalance += 6;
+                    return;
+                }
+            }
+        }
+    }
+}

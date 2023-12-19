@@ -14,6 +14,7 @@ public class MenuCardDisplayScript : MonoBehaviour
     public TextMeshProUGUI cardNameText;
     public TextMeshProUGUI priceText;
 
+    public TextMeshProUGUI dicetext;
     public Image DiceArtwork;
     public Image typeBorderColor;
 
@@ -38,45 +39,21 @@ public class MenuCardDisplayScript : MonoBehaviour
 
         cardNameText.text = recipeCard.name;
         priceText.text = recipeCard.basePrice.ToString();
+        SetDicePrices();
     }
 
     private void Update()
     {
-        // check if there are any updates
+        // set the recipe card of the menu display
         recipeCard = player.playerRecipeCards[cardNumber - 1];
+
+        // set up card display based on recipe card
         setRecipeDisplays();
 
-        if (Input.GetMouseButton(0) && isExpanded)
-        {
-            Destroy(cardDisplay.gameObject);
-            isExpanded = false;
-        }
+        cardNameText.text = recipeCard.name;
+        priceText.text = recipeCard.basePrice.ToString();
+        SetDicePrices();
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-        if (Input.GetMouseButtonDown(0) && hit.collider == col)
-        {
-            Debug.Log("Clicked" + recipeCard.name); // open recipe card
-            // open viewer
-            Vector3 parent = this.transform.position;
-            parent.x = 0;
-            Quaternion q = this.transform.rotation;
-            parent += new Vector3(0, 75, 50);
-            q *= Quaternion.Euler(-15, 0, 0);
-            cardDisplay = Instantiate(expandedRecipeCardDisplay);
-            cardDisplay.transform.position = parent;
-            cardDisplay.transform.rotation = q;
-            cardDisplay.recipeCard = recipeCard;
-            StartCoroutine(DeleteCardCoroutine());
-        }
-    }
-
-    IEnumerator DeleteCardCoroutine()
-    {
-        yield return new WaitForSeconds(0.5f);
-
-        isExpanded = true;
     }
 
     void setRecipeDisplays()
@@ -112,5 +89,17 @@ public class MenuCardDisplayScript : MonoBehaviour
                 typeBorderColor.color = Color.magenta;
                 break;
         }
+    }
+
+    void SetDicePrices()
+    {
+        dicetext.text = "";
+
+        foreach (RecipeCard.diceType num in recipeCard.cost)
+        {
+            string newText = dicetext.text + RecipeCard.stringFromDiceType(num) + " ";
+            dicetext.text = newText;
+        }
+
     }
 }

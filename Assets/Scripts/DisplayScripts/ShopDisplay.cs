@@ -14,7 +14,6 @@ public class ShopDisplay : MonoBehaviour
     public TextMeshProUGUI priceText;
 
     public TextMeshProUGUI dicetext;
-    public Image dicePic;
     public Image typeBorderColor;
 
     // Start is called before the first frame update
@@ -28,6 +27,7 @@ public class ShopDisplay : MonoBehaviour
 
             // set up card display based on recipe card
             setRecipeDisplays();
+
             cardNameText.text = recipeCard.name;
             priceText.text = recipeCard.basePrice.ToString();
             SetDicePrices();

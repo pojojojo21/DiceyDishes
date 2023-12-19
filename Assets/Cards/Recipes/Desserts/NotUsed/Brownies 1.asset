@@ -10,18 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 770d689121f2730489010c9d6b5666e0, type: 3}
-  m_Name: Sliders
+  m_Name: Brownies 1
   m_EditorClassIdentifier: 
-  name: Sliders
-  instant: If this is the first recipe you make this round, this recipe counts as
-    both an Appetizer and an Entree for all purposes this round.
-  effect: 
+  name: Brownies
+  instant: Reroll all of your remaining dice for 0 coins.
+  effect: If this is the last recipe you make this round, increase its value by 4
+    this round.
   ability: 
-  input: 0
-  inputCard: {fileID: 0}
   basePrice: 12
   totalValue: 12
   tier: 2
-  type: 02000000
+  type: 03000000
   cost: 060000000600000007000000
   made: 0

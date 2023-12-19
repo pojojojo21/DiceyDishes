@@ -20,6 +20,9 @@ public class Player : ScriptableObject
     public RecipeCard cardBought;
     public int cardReplaced;
 
+    // win condition
+    public int stars;
+
     private void OnEnable()
     {
         playerBalance = 20;
@@ -29,6 +32,7 @@ public class Player : ScriptableObject
         shopBoost = 0;
         cardBought = null;
         cardReplaced = -1;
+        stars = 0;
         InitializeDiceList();
     }
 
@@ -76,6 +80,9 @@ public class Player : ScriptableObject
         int moneyEarned = 0;
         rerollBoost = 0;
 
+        int countMoney14 = 0;
+        bool make30 = false;
+
         for (int i = 0;i < this.recipeMade.Count;i++)
         {
             if (this.recipeMade[i])
@@ -93,7 +100,18 @@ public class Player : ScriptableObject
                 }
 
                 // add recipe amount to total
-                moneyEarned += (int)Mathf.Ceil(r.totalValue * multiplier);
+                int moneyAdded = (int)Mathf.Ceil(r.totalValue * multiplier);
+                
+                if (moneyAdded > 13)
+                {
+                    countMoney14++;
+                }
+                if (moneyAdded >= 30)
+                {
+                    make30 = true;
+                }
+
+                moneyEarned += moneyAdded;
 
                 // move card tier down
                  r.MoveDown();
@@ -101,6 +119,13 @@ public class Player : ScriptableObject
                 // set recipe back to unmade
                 this.recipeMade[i] = false;
                 r.made = false;
+            } else
+            {
+                RecipeCard r = this.playerRecipeCards[i];
+                if (r.tier == RecipeCard.cardTier.Bottom)
+                {
+                    r.MoveUp();
+                }
             }
         }
 
@@ -119,6 +144,27 @@ public class Player : ScriptableObject
             this.playerRecipeCards[this.cardReplaced] = this.cardBought;
             this.cardBought = null;
             this.cardReplaced = -1;
+        }
+
+        // check for stars earned
+        if (stars == 0)
+        {
+            if (countMoney14 > 2)
+            {
+                stars++;
+            }
+        } else if (stars == 1)
+        {
+            if (make30)
+            {
+                stars++;
+            }
+        } else if (stars == 2)
+        {
+            if (moneyEarned >= 50)
+            {
+                stars++;
+            }
         }
 
         return moneyEarned;

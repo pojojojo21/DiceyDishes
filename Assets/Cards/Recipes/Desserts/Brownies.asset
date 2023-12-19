@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: Brownies
   m_EditorClassIdentifier: 
   name: Brownies
-  instant: Reroll all of your remaining dice for 0 coins.
+  instant: Next reroll costs 0 coins.
   effect: If this is the last recipe you make this round, increase its value by 4
     this round.
   ability: 
+  input: 0
+  inputCard: {fileID: 0}
   basePrice: 12
   totalValue: 12
   tier: 2

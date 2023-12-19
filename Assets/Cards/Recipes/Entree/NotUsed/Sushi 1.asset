@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 770d689121f2730489010c9d6b5666e0, type: 3}
-  m_Name: Sliders
+  m_Name: Sushi 1
   m_EditorClassIdentifier: 
-  name: Sliders
-  instant: If this is the first recipe you make this round, this recipe counts as
-    both an Appetizer and an Entree for all purposes this round.
+  name: Sushi
+  instant: 
   effect: 
-  ability: 
+  ability: If this card is on your menu, you may chose to reroll all of your dice
+    immediately for 0 coins after your first roll.
   input: 0
   inputCard: {fileID: 0}
   basePrice: 12
   totalValue: 12
   tier: 2
-  type: 02000000
-  cost: 060000000600000007000000
+  type: 00000000
+  cost: 00000000020000000e000000
   made: 0

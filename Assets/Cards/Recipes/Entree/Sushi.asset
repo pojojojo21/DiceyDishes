@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Sushi
   m_EditorClassIdentifier: 
   name: Sushi
-  instant: 
+  instant: Next reroll costs 0 coins.
   effect: 
-  ability: If this card is on your menu, you may chose to reroll all of your dice
-    immediately for 0 coins after your first roll.
+  ability: 
+  input: 0
+  inputCard: {fileID: 0}
   basePrice: 12
   totalValue: 12
   tier: 2

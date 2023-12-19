@@ -17,6 +17,8 @@ MonoBehaviour:
   effect: If this is the last recipe you make this round, move another Recipe up
     1 track on your Menu.
   ability: 
+  input: 1
+  inputCard: {fileID: 0}
   basePrice: 8
   totalValue: 8
   tier: 2

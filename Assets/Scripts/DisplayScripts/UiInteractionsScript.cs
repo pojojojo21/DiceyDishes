@@ -21,6 +21,11 @@ public class UiInteractionsScript : MonoBehaviour
     public GameObject cardsDisplay;
     bool isShopDisplayOpen;
     public GameObject shopsDisplay;
+    bool isObjectiveDisplayOpen;
+    public GameObject objectiveDisplay;
+    public TextMeshProUGUI objectiveMessage;
+    public TextMeshProUGUI objectiveCount;
+
 
     public List<GameObject> diceDisplayList;
     public List<GameObject> cardsDisplayList;
@@ -53,6 +58,7 @@ public class UiInteractionsScript : MonoBehaviour
         isDiceDisplayOpen = false;
         isCardsDisplayOpen = false;
         isShopDisplayOpen = false;
+        isObjectiveDisplayOpen = false;
     }
 
     // Update is called once per frame
@@ -148,11 +154,24 @@ public class UiInteractionsScript : MonoBehaviour
                 }
 
                 RecipeCard r = player.playerRecipeCards[cardIndex];
+
                 // check if dice selected meet recipe requirements
                 bool check = r.VerifyDice(list);
                 if (check)
                 {
                     Debug.Log("Make Recipe");
+                    if (r.name == "Spaghetti & Meatballs")
+                    {
+                        foreach (int i in selectedDiceIndices)
+                        {
+                            if (player.playerDiceList[i] == diceType.Six)
+                            {
+                                DeSelectDie(i);
+                                break;
+                            }
+                        }
+                    }
+
                     foreach (int i in selectedDiceIndices)
                     {
                         diceDisplayList[i].SetActive(false);
@@ -222,6 +241,25 @@ public class UiInteractionsScript : MonoBehaviour
                         {
                             card.effectFunction.Effect(card, player);
                             made.Add(card);
+                        } else if (card.name == "Mac n' Cheese")
+                        {
+                            // insure there is an entree in hand before running effect on mac n cheese
+                            card.input = false;
+                            foreach (RecipeCard c in player.playerRecipeCards)
+                            {
+                                foreach (recipeType t in c.type)
+                                {
+                                    if (t == recipeType.Entree)
+                                    {
+                                        card.input = true;
+                                    }
+                                }
+                            }
+
+                            if (!card.input)
+                            {
+                                made.Add(card);
+                            }
                         }
                     }
                     else
@@ -235,8 +273,17 @@ public class UiInteractionsScript : MonoBehaviour
                     player.recipeOrderMade.Remove(card);
                 }
 
-                // else resolve recipes here
-                if (player.recipeOrderMade.Count == 0)
+                foreach (RecipeCard card in player.playerRecipeCards)
+                {
+                    if (card.name == "Sliders")
+                    {
+                        card.type.Clear();
+                        card.type.Add(recipeType.Appetizer);
+                    }
+                }
+
+                    // else resolve recipes here
+                    if (player.recipeOrderMade.Count == 0)
                 {
                     // initialized Recipe Resolution - turn into loop through all players
                     int moneyEarned = player.ResolveRecipes();
@@ -271,8 +318,31 @@ public class UiInteractionsScript : MonoBehaviour
 
                 // set input 
                 RecipeCard card = player.recipeOrderMade[0];
-                card.inputCard = player.playerRecipeCards[cardIndex];
 
+                if (player.recipeOrderMade[0].name == "Mac n' Cheese" && card.type[0] != recipeType.Entree)
+                {
+                    userMessages.text = "Please select an Entree.";
+                    Invoke("ClearUserMessage", 2);
+                    return;
+                }
+
+                if (player.recipeOrderMade[0].name == "Curry" && card.tier == cardTier.Bottom)
+                {
+                    userMessages.text = "Please select a recipe not on the bottom tier.";
+                    Invoke("ClearUserMessage", 2);
+                    return;
+                }
+
+                if (player.recipeOrderMade[0].name == "Chicken Noodle Soup")
+                {
+                    player.cardBought = GameManagerScript.singleton.shop[cardIndex];
+                    GameManagerScript.singleton.shop.Remove(player.cardBought);
+                    GameManagerScript.singleton.FillShop();
+                } else
+                {
+                    card.inputCard = player.playerRecipeCards[cardIndex];
+                }
+                
                 // run effect
                 card.effectFunction.Effect(card, player);
 
@@ -282,6 +352,7 @@ public class UiInteractionsScript : MonoBehaviour
                 // else resolve recipes here
                 if (player.recipeOrderMade.Count == 0)
                 {
+                    // reset 
                     // initialized Recipe Resolution - turn into loop through all players
                     int moneyEarned = player.ResolveRecipes();
 
@@ -343,6 +414,23 @@ public class UiInteractionsScript : MonoBehaviour
                 }
             }
         }
+
+        if (player.stars > 2)
+        {
+            // END GAME
+            GameManagerScript.singleton.currentPhase = 0;
+            isDiceDisplayOpen = false;
+            isCardsDisplayOpen = false;
+            isShopDisplayOpen = false;
+            isObjectiveDisplayOpen = false;
+            diceDisplay.SetActive(false);
+            cardsDisplay.SetActive(false);
+            shopsDisplay.SetActive(false);
+            objectiveDisplay.SetActive(false);
+            userMessages.text = "Game won! Enter \"Start\" to play again.";
+        }
+
+        updateObjective();
     }
 
     void GetElementsClicked()
@@ -371,6 +459,11 @@ public class UiInteractionsScript : MonoBehaviour
             {
                 shopsDisplay.SetActive(!isShopDisplayOpen);
                 isShopDisplayOpen = !isShopDisplayOpen;
+            }
+            if (ui_element.name == "OpenObjectiveDisplay" && GameManagerScript.singleton.currentPhase != 0)
+            {
+                objectiveDisplay.SetActive(!isObjectiveDisplayOpen);
+                isObjectiveDisplayOpen = !isObjectiveDisplayOpen;
             }
         }
     }
@@ -452,6 +545,12 @@ public class UiInteractionsScript : MonoBehaviour
         {
             diceDisplayList[i].GetComponentInChildren<TextMeshProUGUI>().text = RecipeCard.stringFromDiceType(player.playerDiceList[i]);
         }
+    }
+
+    public void updateObjective()
+    {
+        objectiveMessage.text = GameManagerScript.singleton.objective;
+        objectiveCount.text = (3 - player.stars).ToString();
     }
 
     // Player Actions

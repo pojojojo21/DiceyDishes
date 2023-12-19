@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: DeviledEggs
   m_EditorClassIdentifier: 
   name: Deviled Eggs
-  instant: If this is the first recipe you make this round, immediately reroll up
-    to 3 of your remaining dice.
+  instant: If this is the first recipe you make this round, your next reroll this
+    round costs 0 coins.
   effect: 
   ability: 
+  input: 0
+  inputCard: {fileID: 0}
   basePrice: 4
   totalValue: 4
   tier: 2
