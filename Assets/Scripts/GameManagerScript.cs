@@ -111,7 +111,7 @@ public class GameManagerScript : MonoBehaviour
         SetUpCriticDeck();
 
         // Set first objective
-        objective = "Earn 14 or more coins each from 3 or more recipes in one round.";
+        objective = "Earn 10 or more coins each from 3 or more recipes in one round.";
 
         // set current phase to 1
         currentPhase = 1;
@@ -255,7 +255,7 @@ public class GameManagerScript : MonoBehaviour
     {
         if (players[user].stars == 0)
         {
-            objective = "Earn 14 or more coins each from 3 or more recipes in one round.";
+            objective = "Earn 10 or more coins each from 3 or more recipes in one round.";
         }
         else if (players[user].stars == 1)
         {

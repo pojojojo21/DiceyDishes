@@ -80,7 +80,7 @@ public class Player : ScriptableObject
         int moneyEarned = 0;
         rerollBoost = 0;
 
-        int countMoney14 = 0;
+        int countMoney10 = 0;
         bool make30 = false;
 
         for (int i = 0;i < this.recipeMade.Count;i++)
@@ -102,9 +102,9 @@ public class Player : ScriptableObject
                 // add recipe amount to total
                 int moneyAdded = (int)Mathf.Ceil(r.totalValue * multiplier);
                 
-                if (moneyAdded > 13)
+                if (moneyAdded > 9)
                 {
-                    countMoney14++;
+                    countMoney10++;
                 }
                 if (moneyAdded >= 30)
                 {
@@ -149,7 +149,7 @@ public class Player : ScriptableObject
         // check for stars earned
         if (stars == 0)
         {
-            if (countMoney14 > 2)
+            if (countMoney10 > 2)
             {
                 stars++;
             }

@@ -50,7 +50,7 @@ public class RecipeCardDisplay : MonoBehaviour
             Vector3 parent = this.transform.position;
             parent.x = 0;
             Quaternion q = this.transform.rotation;
-            parent += new Vector3(0, 75, 50);
+            parent += new Vector3(-10, 60, 35);
             q *= Quaternion.Euler(-15, 0, 0);
             cardDisplay = Instantiate(expandedRecipeCardDisplay);
             cardDisplay.transform.position = parent;

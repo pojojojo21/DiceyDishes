@@ -106,6 +106,13 @@ public class UiInteractionsScript : MonoBehaviour
                 textParser = textParser.Remove(textParser.Length - 1, 1);
                 int.TryParse(textParser, out diceValue);
 
+                if (diceValue < 0 || diceValue > 5)
+                {
+                    userMessages.text = "Dice input out of range.";
+                    Invoke("ClearUserMessage", 2);
+                    return;
+                }
+
                 BuyDice(diceValue);
             }
 
@@ -319,14 +326,14 @@ public class UiInteractionsScript : MonoBehaviour
                 // set input 
                 RecipeCard card = player.recipeOrderMade[0];
 
-                if (player.recipeOrderMade[0].name == "Mac n' Cheese" && card.type[0] != recipeType.Entree)
+                if (card.name == "Mac n' Cheese" && player.playerRecipeCards[cardIndex].type[0] != recipeType.Entree)
                 {
                     userMessages.text = "Please select an Entree.";
                     Invoke("ClearUserMessage", 2);
                     return;
                 }
 
-                if (player.recipeOrderMade[0].name == "Curry" && card.tier == cardTier.Bottom)
+                if (card.name == "Curry" && player.playerRecipeCards[cardIndex].tier == cardTier.Bottom)
                 {
                     userMessages.text = "Please select a recipe not on the bottom tier.";
                     Invoke("ClearUserMessage", 2);
@@ -378,13 +385,25 @@ public class UiInteractionsScript : MonoBehaviour
                 textParser = textParser.Remove(textParser.Length - 1, 1);
                 int.TryParse(textParser, out cardIndex);
 
-                if (cardIndex < 0 || cardIndex > 4)
+                if (cardIndex == -1)
+                {
+                    player.shopBoost = 0;
+                    GameManagerScript.singleton.currentPhase = 1;
+                    GameManagerScript.singleton.round++;
+
+                    userMessages.text = "Round Over: \"Start Round\"";
+                    Invoke("ClearUserMessage", 3);
+                    return;
+                }
+
+                if (cardIndex < 0 || cardIndex > 5)
                 {
                     userMessages.text = "Card input out of range.";
                     Invoke("ClearUserMessage", 2);
                     return;
                 }
                 BuyRecipe(cardIndex);
+                GameManagerScript.singleton.FillShop();
             }
 
             if ((textInput.text.Contains("Discard")) && (GameManagerScript.singleton.currentPhase == 4) && (player.cardBought))
@@ -544,6 +563,10 @@ public class UiInteractionsScript : MonoBehaviour
         for (int i = 0; i < player.playerDieCount; i++)
         {
             diceDisplayList[i].GetComponentInChildren<TextMeshProUGUI>().text = RecipeCard.stringFromDiceType(player.playerDiceList[i]);
+        }
+        for (int i = player.playerDieCount; i < 8; i++)
+        {
+            diceDisplayList[i].GetComponentInChildren<TextMeshProUGUI>().text = RecipeCard.stringFromDiceType(diceType.Question);
         }
     }
 
